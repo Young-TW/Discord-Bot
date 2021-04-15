@@ -258,7 +258,7 @@ for filename in os.listdir('./cmds'):
     if filename.endswith('.py'):
         bot.load_extension(f'cmds.{filename[:-3]}')
 
-bot.run('NzcwOTA4MTUzNjEzMTIzNTg0.X5kaKg.29HnPAIeAeV919mCC8QriKSCnQs')
+bot.run('')
 
 #########################################################################
 #@bot.event

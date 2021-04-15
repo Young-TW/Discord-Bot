@@ -4,6 +4,8 @@ from discord import Guild, guild#Guild定義在discord底下
 import random
 import copy
 import os
+import requests
+import bs4
 
 intents = discord.Intents.all()
 bot=commands.Bot(command_prefix=".",intents=intents)
@@ -36,11 +38,40 @@ async def p(ctx,number=None):
         await ctx.send("請輸入參數")
 
 @bot.command()
-async def n(ctx,number=None):
+async def n(ctx,number=None,page=0):
     if number!=None:
-        await ctx.send(f"https://nhentai.net/g/{number}/")
-    else :
-        await ctx.send("請輸入參數")
+        text = f"https://nhentai.net/g/{number}/"
+        #爬蟲
+        hentai = requests.get(text)
+        data = bs4.BeautifulSoup(hentai.text, "lxml").select("#thumbnail-container img")
+        urls = [i["src"] for i in data if not i["src"].startswith("data")]
+        #輸出訊息
+        embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",url=urls[0])
+        embed.set_footer(text=" By Young#0001")
+        embed.set_image(url=urls[0])
+        message=await ctx.send(embed=embed)
+        for i in ["◀","▶"]:
+            await message.add_reaction(i)
+        #檢查表情符號(函式)
+        def check(reaction, user):
+            return user == ctx.author and reaction.message == message
+        #檢查表情符號(迴圈)
+        while 1 :
+            if(page + 1 > len(urls) - 1): break
+            reaction, user = await bot.wait_for("reaction_add",timeout=60.0,check=check)
+            if str(reaction) ==  "▶":
+                page+=1
+            elif str(reaction) == "◀":
+                page-=1
+            await message.remove_reaction(reaction,user)
+
+            embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",url=f"{urls[page]}")
+            embed.set_footer(text="By Young#0001")
+            embed.set_image(url=f"{urls[page]}")
+            print (f"{urls[page]}")
+            await message.edit(embed=embed)
+    else:
+        await ctx.send(f"請輸入參數")
 
 @bot.command()
 async def w(ctx,number=None):
@@ -225,5 +256,5 @@ class load():
         bot.reload_extension(f'cmds.{extension}')
         await ctx.send(f'reloaded {extension} done.')
 
-bot.run('NzcwOTA4MTUzNjEzMTIzNTg0.X5kaKg.29HnPAIeAeV919mCC8QriKSCnQs')
+bot.run('')
 

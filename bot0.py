@@ -161,4 +161,4 @@ async def reboot(ctx):
 async def rebooterror(ctx, error):
     await ctx.send("你不是我男友別想命令我重啟")
 
-bot.run('NzcwOTA4MTUzNjEzMTIzNTg0.X5kaKg.29HnPAIeAeV919mCC8QriKSCnQs')
+bot.run('')
