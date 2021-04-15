@@ -29,4 +29,4 @@ async def reboot(ctx):
 async def rebooterror(ctx, error):
     await ctx.send("錯誤 非bot擁有者")
 
-bot.run("ODAyMDU2NzM4ODMyMjUyOTQw.YAprjA.04G7D_FwlwSY9AQlmtZZuWzAiHU")
+bot.run("")

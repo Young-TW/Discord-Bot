@@ -225,5 +225,5 @@ class load():
         bot.reload_extension(f'cmds.{extension}')
         await ctx.send(f'reloaded {extension} done.')
 
-bot.run('NzcwOTA4MTUzNjEzMTIzNTg0.X5kaKg.29HnPAIeAeV919mCC8QriKSCnQs')
+bot.run('')
 

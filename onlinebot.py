@@ -39,4 +39,4 @@ async def reboot(ctx):
 async def rebooterror(ctx, error):
     await ctx.send("騙人的吧")
 
-bot.run("ODAyOTM3MjgwMjMwNDU3Mzc1.YA2fnQ.Wa38G0gjdVifYKFAHGlXpKauJ9s")
+bot.run("")
