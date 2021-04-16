@@ -16,15 +16,15 @@ async def on_ready():
     await bot.change_presence(status=discord.Status.idle, activity=game)
 ##################################################################################################
 @bot.command()
-async def n(ctx,number=None,page=0):
+async def w(ctx,number=None,page=0):
     if number!=None:
-        text = f"https://nhentai.net/g/{number}/"
+        text = f"https://www.wnacg.org/photos-slide-aid-{number}.html/"
         #爬蟲
         hentai = requests.get(text)
         data = bs4.BeautifulSoup(hentai.text, "lxml").select("#thumbnail-container img")
         urls = [i["src"] for i in data if not i["src"].startswith("data")]
         #輸出訊息
-        embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",url=urls[0])
+        embed=discord.Embed(color=0x009dff,title="Wnacg Viewer",url=urls[0])
         embed.set_footer(text=" By Young#0001")
         embed.set_image(url=urls[0])
         message=await ctx.send(embed=embed)
@@ -43,7 +43,7 @@ async def n(ctx,number=None,page=0):
                 page-=1
             await message.remove_reaction(reaction,user)
 
-            embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",url=f"{urls[page]}")
+            embed=discord.Embed(color=0x009dff,title="Wnacg Viewer",url=f"{urls[page]}")
             embed.set_footer(text="By Young#0001")
             embed.set_image(url=f"{urls[page]}")
             print (f"{urls[page]}")
@@ -51,4 +51,4 @@ async def n(ctx,number=None,page=0):
     else:
         await ctx.send(f"請輸入參數")
 ##################################################################################################
-bot.run('')
+bot.run('Nzg2OTg2OTU0NDc4NTgzODU4.X9OYtw.9MJdNf_WwI5P67Vgc9meepVYQkg')
