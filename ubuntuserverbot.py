@@ -4,6 +4,8 @@ from discord import Guild, guild#Guild定義在discord底下
 import random
 import copy
 import os
+import requests
+import bs4
 
 intents = discord.Intents.all()
 bot=commands.Bot(command_prefix=".",intents=intents)
