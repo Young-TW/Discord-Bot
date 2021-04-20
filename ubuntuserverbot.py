@@ -64,11 +64,9 @@ async def n(ctx,number=None,page=0):
             elif str(reaction) == "◀":
                 page-=1
             await message.remove_reaction(reaction,user)
-
             embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",url=f"{urls[page]}")
             embed.set_footer(text="By Young#0001")
             embed.set_image(url=f"{urls[page]}")
-            print (f"{urls[page]}")
             await message.edit(embed=embed)
     else:
         await ctx.send(f"請輸入參數")
@@ -239,7 +237,7 @@ class Game(commands.Cog):
                 await ctx.send("過關")
                 break
 bot.add_cog(Game(bot))
-
+'''
 class load():
     @bot.command()
     async def load(self,ctx,extension):
@@ -255,6 +253,6 @@ class load():
     async def reload(self,ctx,extension):
         bot.reload_extension(f'cmds.{extension}')
         await ctx.send(f'reloaded {extension} done.')
-
-bot.run('')
+'''
+bot.run('NzcwOTA4MTUzNjEzMTIzNTg0.X5kaKg.RhT4UFMnH_ReENCQlAxpg_608GU')
 
