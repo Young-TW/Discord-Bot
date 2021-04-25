@@ -35,29 +35,29 @@ async def p(ctx,number=None):
     if number!=None:
         await ctx.send(f"https://www.pixiv.net/artworks/{number}")
     else :
-        await ctx.send("請輸入參數")
+        await ctx.send("please input numbers")
 
 @bot.command()
 async def n(ctx,number=None,page=0):
     if number!=None:
         text = f"https://nhentai.net/g/{number}/"
-        #爬蟲
         hentai = requests.get(text)
         data = bs4.BeautifulSoup(hentai.text, "lxml").select("#thumbnail-container img")
         urls = [i["src"] for i in data if not i["src"].startswith("data")]
-        #輸出訊息
         embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",url=urls[0])
         embed.set_footer(text=" By Young#0001")
         embed.set_image(url=urls[0])
         message=await ctx.send(embed=embed)
         for i in ["◀","▶"]:
             await message.add_reaction(i)
-        #檢查表情符號(函式)
         def check(reaction, user):
             return user == ctx.author and reaction.message == message
-        #檢查表情符號(迴圈)
         while 1 :
-            if(page + 1 > len(urls) - 1): break
+            if(page + 1 > len(urls) - 1):
+                embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",description="The end.")
+                embed.set_footer(text="By Young#0001")
+                await message.edit(embed=embed)
+                break
             reaction, user = await bot.wait_for("reaction_add",timeout=60.0,check=check)
             if str(reaction) ==  "▶":
                 page+=1
@@ -69,21 +69,21 @@ async def n(ctx,number=None,page=0):
             embed.set_image(url=f"{urls[page]}")
             await message.edit(embed=embed)
     else:
-        await ctx.send(f"請輸入參數")
+        await ctx.send(f"please input numbers")
 
 @bot.command()
 async def w(ctx,number=None):
     if number!=None:
         await ctx.send(f"https://www.wnacg.org/photos-index-aid-{number}.html")
     else :
-        await ctx.send("請輸入參數")
+        await ctx.send("please input numbers")
 
 @bot.command()
 async def osumap(ctx,number=None):
     if number!=None:
         await ctx.send(f"https://osu.ppy.sh/beatmapsets/{number}#osu/")
     else :
-        await ctx.send("請輸入參數")
+        await ctx.send("please input numbers")
 
 @bot.command()
 @commands.is_owner()
@@ -111,7 +111,7 @@ async def bye(ctx):
 @bot.command()
 @commands.is_owner()
 async def reboot(ctx):
-    await ctx.send("```\n重啟.............\n```")
+    await ctx.send("```\nreboot.............\n```")
     await bot.close()
 @reboot.error
 async def rebooterror(ctx,error):
