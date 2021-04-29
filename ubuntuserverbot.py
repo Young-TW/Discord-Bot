@@ -6,6 +6,10 @@ import copy
 import os
 import requests
 import bs4
+import json
+
+with open('setting.json', mode='r',encoding='utf8') as jfile:
+    jdata = json.load(jfile)
 
 intents = discord.Intents.all()
 bot=commands.Bot(command_prefix=".",intents=intents)
@@ -18,12 +22,12 @@ async def on_ready():
 
 @bot.event
 async def on_member_join(member):
-    channel = bot.get_channel(754283081694969866)
+    channel = bot.get_channel(int(jdata['WelcomeChannelID']))
     await channel.send(f'{member} Welcome to UwU!')
 
 @bot.event
 async def on_member_remove(member):
-    channel = bot.get_channel(772290523481243648)
+    channel = bot.get_channel(int(jdata['LeaveChannelID']))
     await channel.send(f'{member} leave')
 
 @bot.command()
@@ -254,5 +258,5 @@ class load():
         bot.reload_extension(f'cmds.{extension}')
         await ctx.send(f'reloaded {extension} done.')
 '''
-bot.run('NzcwOTA4MTUzNjEzMTIzNTg0.X5kaKg.RhT4UFMnH_ReENCQlAxpg_608GU')
+bot.run(jdata['YoungBotTOKEN'])
 
