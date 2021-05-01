@@ -3,22 +3,26 @@ from discord.ext import commands, tasks  #這裡是discord.ext
 from discord import Guild, channel, guild  #Guild定義在discord底下
 import random
 import copy
+import time
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix="/", intents=intents)
 
+global channellist
 @bot.event()
 async def on_ready():
     print('We have logged in as {0.user}'.format(bot))
-    channellist = bot.get_all_channels
-    print(channellist)
-#    return 
+    channellist = [guild.Members] #bot.get_all_channels 
+    for i in range (len(channellist)):
+        print(channellist[i])
 
 @bot.command()
 async def b(ctx,cha,msg):
-    channel = bot.get_channel(783704087740809266,783704065849688154)#channel = channellist
-    while 1:
-        await channel.send("@everyone")
+    for i in range (len(channellist)):
+        channel = bot.get_channel(channellist[i])#channel = channellist
+        while 1:
+            await channel.send("@everyone")
+            time.sleep(1)
 
 @bot.command()
 @commands.is_owner()

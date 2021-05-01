@@ -6,6 +6,10 @@ import copy
 import os
 import requests
 import bs4
+import json
+
+with open('setting.json', mode='r',encoding='utf8') as jfile:
+    jdata = json.load(jfile)
 
 intents = discord.Intents.all()
 bot=commands.Bot(command_prefix=".",intents=intents)
@@ -18,12 +22,12 @@ async def on_ready():
 
 @bot.event
 async def on_member_join(member):
-    channel = bot.get_channel(754283081694969866)
+    channel = bot.get_channel(int(jdata['WelcomeChannelID']))
     await channel.send(f'{member} Welcome to UwU!')
 
 @bot.event
 async def on_member_remove(member):
-    channel = bot.get_channel(772290523481243648)
+    channel = bot.get_channel(int(jdata['LeaveChannelID']))
     await channel.send(f'{member} leave')
 
 @bot.command()
@@ -35,57 +39,55 @@ async def p(ctx,number=None):
     if number!=None:
         await ctx.send(f"https://www.pixiv.net/artworks/{number}")
     else :
-        await ctx.send("請輸入參數")
+        await ctx.send("please input numbers")
 
 @bot.command()
 async def n(ctx,number=None,page=0):
     if number!=None:
         text = f"https://nhentai.net/g/{number}/"
-        #爬蟲
         hentai = requests.get(text)
         data = bs4.BeautifulSoup(hentai.text, "lxml").select("#thumbnail-container img")
         urls = [i["src"] for i in data if not i["src"].startswith("data")]
-        #輸出訊息
         embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",url=urls[0])
         embed.set_footer(text=" By Young#0001")
         embed.set_image(url=urls[0])
         message=await ctx.send(embed=embed)
         for i in ["◀","▶"]:
             await message.add_reaction(i)
-        #檢查表情符號(函式)
         def check(reaction, user):
             return user == ctx.author and reaction.message == message
-        #檢查表情符號(迴圈)
         while 1 :
-            if(page + 1 > len(urls) - 1): break
+            if(page + 1 > len(urls) - 1):
+                embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",description="The end.")
+                embed.set_footer(text="By Young#0001")
+                await message.edit(embed=embed)
+                break
             reaction, user = await bot.wait_for("reaction_add",timeout=60.0,check=check)
             if str(reaction) ==  "▶":
                 page+=1
             elif str(reaction) == "◀":
                 page-=1
             await message.remove_reaction(reaction,user)
-
             embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",url=f"{urls[page]}")
             embed.set_footer(text="By Young#0001")
             embed.set_image(url=f"{urls[page]}")
-            print (f"{urls[page]}")
             await message.edit(embed=embed)
     else:
-        await ctx.send(f"請輸入參數")
+        await ctx.send(f"please input numbers")
 
 @bot.command()
 async def w(ctx,number=None):
     if number!=None:
         await ctx.send(f"https://www.wnacg.org/photos-index-aid-{number}.html")
     else :
-        await ctx.send("請輸入參數")
+        await ctx.send("please input numbers")
 
 @bot.command()
 async def osumap(ctx,number=None):
     if number!=None:
         await ctx.send(f"https://osu.ppy.sh/beatmapsets/{number}#osu/")
     else :
-        await ctx.send("請輸入參數")
+        await ctx.send("please input numbers")
 
 @bot.command()
 @commands.is_owner()
@@ -113,7 +115,7 @@ async def bye(ctx):
 @bot.command()
 @commands.is_owner()
 async def reboot(ctx):
-    await ctx.send("```\n重啟.............\n```")
+    await ctx.send("```\nreboot.............\n```")
     await bot.close()
 @reboot.error
 async def rebooterror(ctx,error):
@@ -239,7 +241,7 @@ class Game(commands.Cog):
                 await ctx.send("過關")
                 break
 bot.add_cog(Game(bot))
-
+'''
 class load():
     @bot.command()
     async def load(self,ctx,extension):
@@ -255,6 +257,6 @@ class load():
     async def reload(self,ctx,extension):
         bot.reload_extension(f'cmds.{extension}')
         await ctx.send(f'reloaded {extension} done.')
-
-bot.run('')
+'''
+bot.run(jdata['YoungBotTOKEN'])
 

@@ -1,6 +1,10 @@
 import discord
 from discord.ext import commands,tasks#這裡是discord.ext
 from discord import Guild, guild#Guild定義在discord底下
+import json
+
+with open('setting.json', mode='r',encoding='utf8') as jfile:
+    jdata = json.load(jfile)
 
 intents = discord.Intents.all()
 bot=commands.Bot(command_prefix=".",intents=intents)
@@ -13,11 +17,14 @@ async def on_ready():
 #####################################################################################
 
 @bot.command()
-@commands.is_owner()
-async def say(ctx,channel, *, msg):
-    channel = bot.get_channel(channel)
-    await ctx.send(msg)
+async def say(ctx, *, msg):
+    userid = discord.user.id
+    if userid == (int(jfile['Young_ID']) or int(jfile['Rou_ID'])):
+        await ctx.message.delete()
+        await ctx.send(msg)
+    else:
+        await ctx.send("Authority Error")
 
 #####################################################################################
-bot.run('')
+bot.run(jdata['TestBotTOKEN'])
 
