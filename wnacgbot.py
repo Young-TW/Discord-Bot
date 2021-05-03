@@ -21,7 +21,7 @@ async def w(ctx,number=None,page=0):
         text = f"https://www.wnacg.org/photos-slide-aid-{number}.html/"
         #爬蟲
         hentai = requests.get(text)
-        data = bs4.BeautifulSoup(hentai.text, "lxml").select("#thumbnail-container img")
+        data = bs4.BeautifulSoup(hentai.text, "lxml").select("#img_list img")
         urls = [i["src"] for i in data if not i["src"].startswith("data")]
         #輸出訊息
         embed=discord.Embed(color=0x009dff,title="Wnacg Viewer",url=urls[0])
@@ -51,4 +51,4 @@ async def w(ctx,number=None,page=0):
     else:
         await ctx.send(f"請輸入參數")
 ##################################################################################################
-bot.run('Nzg2OTg2OTU0NDc4NTgzODU4.X9OYtw.9MJdNf_WwI5P67Vgc9meepVYQkg')
+bot.run('Nzg2OTg2OTU0NDc4NTgzODU4.X9OYtw.XhQYPe-aMEeNpHbORtQdbboflQg')
