@@ -3,6 +3,10 @@ from discord.ext import commands, tasks
 from discord import Guild, channel, guild
 import random
 import copy
+import json
+
+with open('setting.json', mode='r',encoding='utf8') as jfile:
+    jdata = json.load(jfile)
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix="/", intents=intents)
@@ -39,4 +43,4 @@ async def reboot(ctx):
 async def rebooterror(ctx, error):
     await ctx.send("騙人的吧")
 
-bot.run("")
+bot.run(jdata['TestBotTOKEN'])

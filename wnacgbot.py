@@ -5,6 +5,10 @@ import random
 import copy
 import requests
 import bs4
+import json
+
+with open('setting.json', mode='r',encoding='utf8') as jfile:
+    jdata = json.load(jfile)
 
 intents = discord.Intents.all()
 bot=commands.Bot(command_prefix=".",intents=intents)
@@ -51,4 +55,4 @@ async def w(ctx,number=None,page=0):
     else:
         await ctx.send(f"請輸入參數")
 ##################################################################################################
-bot.run('Nzg2OTg2OTU0NDc4NTgzODU4.X9OYtw.XhQYPe-aMEeNpHbORtQdbboflQg')
+bot.run(jdata['TestBotTOKEN'])
