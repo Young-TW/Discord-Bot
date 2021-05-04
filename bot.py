@@ -1,7 +1,6 @@
 import discord
-from discord.ext import commands,tasks#這裡是discord.ext
+from discord.ext import commands,tasks
 import wmi
-from discord import Guild, guild#Guild定義在discord底下
 import psutil
 import random
 import copy
@@ -53,7 +52,8 @@ async def on_ready():
     game = discord.Game("Discord")
     await bot.change_presence(status=discord.Status.idle, activity=game)
     cpu.start()
-
+    
+cha = None
 class Main():
 
     @bot.event
@@ -88,7 +88,6 @@ class Main():
     async def delete(self,ctx:commands.Context,number:int):
         await ctx.channel.purge(limit=number+1)
 
-    cha=None
     @bot.command()
     @commands.is_owner()
     async def come(self,ctx):

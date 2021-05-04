@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands,tasks
-from discord import Guild, guild
 import random
 import copy
 import requests

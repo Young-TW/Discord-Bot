@@ -22,9 +22,9 @@ async def on_ready():
 user = bot.get_user(434364344424464385)#指定使用者:
 @bot.event
 async def on_user_update(ctx,status):#當使用者上線
-    status == user.status.idle
+    status != user.status.offline
     ctx = bot.get_channel(802939773101670430)#指定訊息傳送頻道
-    await ctx.send(f'user is online!')#傳送使用者上線訊息
+    await ctx.send(f'user is online!')#傳送使用者上線通知
 
 @bot.command()
 async def hello(ctx):

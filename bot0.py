@@ -1,9 +1,12 @@
 import discord
 from discord.ext import commands, tasks  #這裡是discord.ext
 import wmi
-from discord import Guild, guild  #Guild定義在discord底下
 import random
 import copy
+import json
+
+with open('setting.json', mode='r',encoding='utf8') as jfile:
+    jdata = json.load(jfile)
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=".", intents=intents)
@@ -161,4 +164,4 @@ async def reboot(ctx):
 async def rebooterror(ctx, error):
     await ctx.send("你不是我男友別想命令我重啟")
 
-bot.run('')
+bot.run(jdata['YoungBotTOKEN'])

@@ -1,8 +1,8 @@
 import discord
-from discord.ext import commands,tasks#這裡是discord.ext
-from discord import Guild,guild,user#Guild定義在discord底下
-import json
+from discord.ext import commands,tasks
 import time
+import json
+
 with open('setting.json', mode='r',encoding='utf8') as jfile:
     jdata = json.load(jfile)
 
@@ -17,7 +17,7 @@ async def on_ready():
 #####################################################################################
 @bot.command()
 async def say(ctx, *, msg):
-    userid = discord.user_id(user)
+    userid = discord.user_id()
     if userid == (int(jfile['Young_ID']) or int(jfile['Rou_ID'])):
         await ctx.message.delete()
         await ctx.send(msg)
