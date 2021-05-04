@@ -241,22 +241,6 @@ class Game(commands.Cog):
                 await ctx.send("過關")
                 break
 bot.add_cog(Game(bot))
-'''
-class load():
-    @bot.command()
-    async def load(self,ctx,extension):
-        bot.load_extension(f'cmds.{extension}')
-        await ctx.send(f'loaded {extension} done.')
 
-    @bot.command()
-    async def unload(self,ctx,extension):
-        bot.unload_extension(f'cmds.{extension}')
-        await ctx.send(f'unloaded {extension} done.')
-
-    @bot.command()
-    async def reload(self,ctx,extension):
-        bot.reload_extension(f'cmds.{extension}')
-        await ctx.send(f'reloaded {extension} done.')
-'''
 bot.run(jdata['YoungBotTOKEN'])
 
