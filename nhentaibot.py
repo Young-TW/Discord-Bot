@@ -31,7 +31,7 @@ async def n(ctx,channel,number=None,page=0):
             urls = [i["src"] for i in data if not i["src"].startswith("data")]
             #輸出訊息
             embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",url=text)
-            embed.set_footer(text=" By Young#0001")
+            embed.set_footer(text="By Young#0001")
             embed.set_image(url=urls[0])
             message=await ctx.send(embed=embed)
             for i in ["◀","▶"]:

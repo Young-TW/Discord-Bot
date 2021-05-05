@@ -4,11 +4,14 @@ import itertools
 import math
 import random
 import os
-
+import json
 import discord
 import youtube_dl
 from async_timeout import timeout
 from discord.ext import commands
+
+with open('setting.json', mode='r',encoding='utf8') as jfile:
+    jdata = json.load(jfile)
 
 # Silence useless bug reports messages
 youtube_dl.utils.bug_reports_message = lambda: ''
@@ -501,4 +504,4 @@ bot.add_cog(Music(bot))
 async def on_ready():
     print('Logged in as:\n{0.user.name}\n{0.user.id}'.format(bot))
 
-bot.run("")
+bot.run(jdata['YoungBotTOKEN'])
