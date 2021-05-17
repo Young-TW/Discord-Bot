@@ -17,9 +17,9 @@ async def on_ready():
 #    game = discord.Game("game")
     await bot.change_presence(status=discord.Status.idle)#, activity=game
 
-#user's id = {userid} #young's id = 434364344424464385
+#user's id = {userid} young's id = 434364344424464385 rou's id = 630764531307642903
 
-user = bot.get_user(434364344424464385)#指定使用者:
+user = bot.get_user()#指定使用者:
 @bot.event
 async def on_user_update(ctx,status):#當使用者上線
     status != user.status.offline
