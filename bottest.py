@@ -15,9 +15,10 @@ async def on_ready():
     game = discord.Game("testing")
     await bot.change_presence(status=discord.Status.idle, activity=game)
 #####################################################################################
+
 @bot.command()
 async def say(ctx, *, msg):
-    userid = discord.user_id()
+    userid = discord.User.id(ctx.author)
     if userid == (int(jfile['Young_ID']) or int(jfile['Rou_ID'])):
         await ctx.message.delete()
         await ctx.send(msg)

@@ -24,8 +24,24 @@ async def n(ctx,channel,number=None,page=0):
     c = channel.is_nsfw(channel)
     if c == 1:
         if number!=None:
-            text = f"https://nhentai.net/g/{number}/"
             #爬蟲
+            #從內容頁面
+            '''
+            page = 1
+            while 1:
+                text = f"https://nhentai.net/g/{number}/{page}/"
+                hentai = requests.get(text)
+                data = bs4.BeautifulSoup(hentai.text, "lxml").select("#image-container img")#這行不確定
+                urls[page] = None#這邊爬蟲不會寫
+                if urls[page] == None:
+                    break
+                #if not i["src"].startswith("data")
+                page += 1
+                #img class=fit-horizontal
+                #section id=image-container
+            '''
+            #從預覽頁面
+            text = f"https://nhentai.net/g/{number}/"
             hentai = requests.get(text)
             data = bs4.BeautifulSoup(hentai.text, "lxml").select("#thumbnail-container img")
             urls = [i["src"] for i in data if not i["src"].startswith("data")]
