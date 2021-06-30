@@ -20,20 +20,22 @@ async def on_ready():
 ##################################################################################################
 @bot.command()
 async def p(ctx,number=None):
-    number
-    if number!=None:
-        text = f"https://www.pixiv.net/artworks/{number}"
-        #爬蟲
-        page = requests.get(text)
-        print(page)
-        data = bs4.BeautifulSoup(page.text, "lxml").select("#gtm-var-theme-kind img")
-        #輸出訊息
-        embed=discord.Embed(color=0x009dff,title="Pixiv Viewer",url=text)
-        embed.set_footer(text=" By Young#0001")
-        embed.set_image(url=data)
-        message=await ctx.send(embed=embed)
+    if "http" in number:
+        number = number-31#從前面去除
     else:
-        await ctx.send(f"Please input number")   
+        if number!=None:
+            text = f"https://www.pixiv.net/artworks/{number}"
+            #爬蟲
+            page = requests.get(text)
+            data = bs4.BeautifulSoup(page.text, "lxml")
+            print(data)
+            #輸出訊息
+            embed=discord.Embed(color=0x009dff,title="Pixiv Viewer",url=text)
+            embed.set_footer(text=" By Young#0001")
+            embed.set_image(url=data)
+            message=await ctx.send(embed=embed)
+        else:
+            await ctx.send(f"Please input number")   
 
 #https://www.pixiv.net/ajax/illust/{number}/pages?lang=zh_tw
 ##################################################################################################
