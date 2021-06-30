@@ -17,10 +17,10 @@ async def on_ready():
 #####################################################################################
 
 @bot.command()
-async def say(ctx, *, msg):
-    userid = discord.User.id(ctx.author)
+async def sayd(ctx, *, msg):
+    await ctx.message.delete()
+    userid = discord.ClientUser.id(ctx.author)
     if userid == (int(jfile['Young_ID']) or int(jfile['Rou_ID'])):
-        await ctx.message.delete()
         await ctx.send(msg)
     else:
         await ctx.send("Authority Error")
