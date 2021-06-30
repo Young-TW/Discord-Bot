@@ -6,6 +6,7 @@ import copy
 import os
 import requests
 import bs4
+from bs4 import BeautifulSoup
 import json
 
 with open('setting.json', mode='r',encoding='utf8') as jfile:
@@ -103,7 +104,7 @@ async def n(ctx,number=None,page=0):
                 await message.edit(embed=embed)
         else:
             await ctx.send(f"Please input number")
-            
+
 @bot.command()
 @commands.is_owner()
 async def say(ctx, *, msg):
