@@ -48,7 +48,6 @@ async def n(ctx,number=None,page=0):
                 #判斷網頁是否結束
                 if imgUrl == "https://static.nhentai.net/img/logo.090da3be7b51.svg":
                     break
-
                 page += 1
 
             page = 0

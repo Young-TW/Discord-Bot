@@ -31,25 +31,29 @@ async def n(ctx,number=None,page=0):
             #爬蟲
             #從內容頁面
             page = 0
-            print(f"爬蟲")
             url = f"https://nhentai.net/g/{number}/{page+1}/"
             headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18362'}
-            r = requests.get(url,headers=headers)
-            Burl = BeautifulSoup(r.text, 'html.parser')
-            img_tags = Burl.find_all('img')
-            for tag in img_tags:
-                imgUrl = tag.get('src')
-            print(f"imgUrl: {imgUrl}")
-            u = imgUrl-3
-            print(u)
-            #判斷網頁是否結束
-            if imgUrl == "https://static.nhentai.net/img/logo.090da3be7b51.svg":
-                break
+            def crawler(p):
+                print(f"爬蟲")
+                url = f"https://nhentai.net/g/{number}/{p+1}/"
+                r = requests.get(url,headers=headers)
+                Burl = BeautifulSoup(r.text, 'html.parser')
+                img_tags = Burl.find_all('img')
+                for tag in img_tags:
+                    imgUrl = tag.get('src')
+                print(f"imgUrl: {imgUrl}")
+                imgUrl.rfind('.')
+                u = imgUrl-3#未完成
+                print(u)
+                #判斷網頁是否結束
+                if "404" in r:
+                    pass
+            crawler(page)
             #輸出訊息
             print("輸出訊息")
             embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",url=url)
             embed.set_footer(text="By Young#0001")
-            embed.set_image(url=urls[0])
+            embed.set_image(url=url)
             message=await ctx.send(embed=embed)
             for i in ["◀","▶"]:
                 await message.add_reaction(i)
@@ -59,20 +63,15 @@ async def n(ctx,number=None,page=0):
                 return user == ctx.author and reaction.message == message
             #檢查表情符號(迴圈)
             while 1 :
-                if(page + 1 > len(urls) - 1):
-                    embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",description="The end.")
-                    embed.set_footer(text="By Young#0001")
-                    await message.edit(embed=embed)
-                    break
                 reaction, user = await bot.wait_for("reaction_add",timeout=60.0,check=check)
                 if str(reaction) ==  "▶":
-                    page+=1
+                    crawler(page+1)
                 elif str(reaction) == "◀":
-                    page-=1
+                    crawler(page-1)
                 await message.remove_reaction(reaction,user)
                 embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",url=url)
                 embed.set_footer(text="By Young#0001")
-                embed.set_image(url=urls[page])
+                embed.set_image(url=url)
                 await message.edit(embed=embed)
         else:
             await ctx.send(f"Please input number")
