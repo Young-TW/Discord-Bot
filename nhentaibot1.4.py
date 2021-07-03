@@ -30,20 +30,30 @@ async def n(ctx,number=None,page=0):
         if number!=None:
             #爬蟲
             #從內容頁面
-            #直接猜測下一張的url
+            #翻頁時爬下一張
             page = 0
             url = f"https://nhentai.net/g/{number}/{page+1}/"
             headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18362'}
-            r = requests.get(url,headers=headers)
+            
             Burl = BeautifulSoup(r.text, 'html.parser')
             img_tags = Burl.find_all('img')
             for tag in img_tags:
                 imgUrl = tag.get('src')
-            #取得附檔名
-            
+            print(f"imgUrl: {imgUrl}")
             def crawler(p):
-                imgUrl = 1
-                
+                print(f"爬蟲第{p+1}圈")
+                url = f"https://nhentai.net/g/{number}/{p+1}/"
+                r = requests.get(url,headers=headers)
+                Burl = BeautifulSoup(r.text, 'html.parser')
+                img_tags = Burl.find_all('img')
+                for tag in img_tags:
+                    imgUrl = tag.get('src')
+                print(f"imgUrl: {imgUrl}")
+                imgUrl.rfind('.')
+
+                #判斷網頁是否結束
+                if "404" in r:
+                    Error404 = True
             crawler(page)
             #輸出訊息
             print("輸出訊息")
