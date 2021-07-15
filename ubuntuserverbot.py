@@ -8,6 +8,7 @@ import requests
 import bs4
 from bs4 import BeautifulSoup
 import json
+import time
 
 with open('setting.json', mode='r',encoding='utf8') as jfile:
     jdata = json.load(jfile)
@@ -34,6 +35,24 @@ async def on_member_remove(member):
 @bot.command()
 async def ping(ctx):
     await ctx.send(f'{round(bot.latency*1000)}ms')
+
+@bot.command()
+async def countdown(ctx, hour, minute):
+    hour = int(hour)
+    minute = int(minute)
+    minute = minute + (hour*60)
+    embed=discord.Embed(color=0x009dff,title=f"倒數計時開始 剩下 {minute} 分鐘")
+    msg = await ctx.send(embed=embed)
+    time.sleep(60)
+    while 1:
+        minute = minute - 1
+        if minute == 0:
+            embed=discord.Embed(color=0x009dff,title="時間到!")
+            await msg.edit(embed=embed)
+            break
+        embed=discord.Embed(color=0x009dff,title=f"剩下 {minute} 分鐘")
+        await msg.edit(embed=embed)
+        time.sleep(60)
 
 @bot.command()
 async def p(ctx,number=None):
