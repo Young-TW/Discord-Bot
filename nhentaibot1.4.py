@@ -28,53 +28,112 @@ async def n(ctx,number=None,page=0):
         await ctx.send("This is not NSFW channel")
     else:
         if number!=None:
+################################################################
             #爬蟲
             #從內容頁面
             #翻頁時爬下一張
-            page = 0
-            url = f"https://nhentai.net/g/{number}/{page+1}/"
             headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18362'}
-            
-            Burl = BeautifulSoup(r.text, 'html.parser')
-            img_tags = Burl.find_all('img')
-            for tag in img_tags:
-                imgUrl = tag.get('src')
-            print(f"imgUrl: {imgUrl}")
-            def crawler(p):
-                print(f"爬蟲第{p+1}圈")
-                url = f"https://nhentai.net/g/{number}/{p+1}/"
+            p = 1
+
+            #定義爬蟲函式
+            def Check404(r):#判斷網頁是否結束
+                if "404" in r:
+                    PageEnd()
+                    return True
+
+            #輸入頁數 取得頁面連結
+            def GetLink(p):
+                print(f"Crawler p={p}")
+                url = f"https://nhentai.net/g/{number}/{p}/"
+                return url
+            #url = Getlink(page)
+
+            #輸入頁面連結 取得網頁回應
+            def Crawler(url):
+                print(f"Crawler url={url}")
                 r = requests.get(url,headers=headers)
+                return r
+            # r = Crawler(Getlink(p))
+
+            #輸入網頁回應 取得圖片連結
+            def FindImgUrl(r):
+                if Check404(r)==1:
+                    PageEnd()
+
+                print(f"FindImgUrl r={r}")
                 Burl = BeautifulSoup(r.text, 'html.parser')
                 img_tags = Burl.find_all('img')
+                print(img_tags)
+                img_tags  = BeautifulSoup(r.text, 'html.parser').find_all('img')
+                print(img_tags)
                 for tag in img_tags:
                     imgUrl = tag.get('src')
                 print(f"imgUrl: {imgUrl}")
-                imgUrl.rfind('.')
+                #imgUrl.rfind('.')
+                return imgUrl
+            #imgUrl = FindImgUrl(Crawler(GetLink(p)))
 
-                #判斷網頁是否結束
-                if "404" in r:
-                    Error404 = True
-            crawler(page)
-            #輸出訊息
-            print("輸出訊息")
-            embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",url=url)
-            embed.set_footer(text="By Young#0001")
-            embed.set_image(url=url)
-            message=await ctx.send(embed=embed)
-            for i in ["◀","▶"]:
-                await message.add_reaction(i)
-            #檢查表情符號(函式)
-            print("檢查表情符號")
+
+                        embed = CreateEmbed(FindImgUrl(Crawler(GetLink(p))))
+            #輸入embed 傳送embed
+            #def SendEmbed(embed):
+            message = await ctx.send(embed=embed)
+            #SendEmbed(CreateEmbed(imgUrl))
+
+            #超出最後一頁時呼叫
+            def PageEnd():
+                Error404=True
+                embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",description="The end.")
+                embed.set_footer(text="By Young#0001")
+                await message.edit(embed=embed)
+
+            #輸入圖片連結 建立embed
+            def CreateEmbed(imgUrl):
+                embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",url=imgUrl)
+                embed.set_footer(text="By Young#0001")
+                embed.set_image(url=imgUrl)
+                return embed
+
+
+
+            #輸入embed 編輯已傳送embed
+            def EditEmbed(embed):
+                await message.edit(embed=embed)
+            #EditEmbed(CreateEmbed(imgUrl))
+
+            #新增翻頁用表情符號
+            def ReationAdd():
+                for i in ["◀","▶"]:
+                    await message.add_reaction(i)
+            
+            #檢查表情符號
             def check(reaction, user):
                 return user == ctx.author and reaction.message == message
-            #檢查表情符號(迴圈)
+
             while 1 :
+                reaction, user = await bot.wait_for("reaction_add",timeout=60.0,check=check)
+                if Error404 == True:
+                    PageEnd()
+                    break
+                else:
+                    if str(reaction) ==  "▶":
+                        page = page+1
+                    elif str(reaction) == "◀":
+                        page = page-1
+                    await message.remove_reaction(reaction,user)
+
+                    c = Crawler(page)
+                    imgUrl = FindImgUrl(c)
+                    Check404(c)
+                    CreateEmbed(imgUrl)
+                    await message.edit(embed=embed)
+            '''
+            def dcSend():
                 reaction, user = await bot.wait_for("reaction_add",timeout=60.0,check=check)
                 if Error404 == True:
                     embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",description="The end.")
                     embed.set_footer(text="By Young#0001")
                     await message.edit(embed=embed)
-                    break
                 if str(reaction) ==  "▶":
                     crawler(page+1)
                 elif str(reaction) == "◀":
@@ -84,6 +143,7 @@ async def n(ctx,number=None,page=0):
                 embed.set_footer(text="By Young#0001")
                 embed.set_image(url=url)
                 await message.edit(embed=embed)
+            '''
         else:
             await ctx.send(f"Please input number")
 
