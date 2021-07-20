@@ -40,10 +40,12 @@ async def n(ctx,number=None,page=0):
                 if "404" in r:
                     PageEnd()
                     return True
+                else:
+                    return False
 
             #輸入頁數 取得頁面連結
             def GetLink(p):
-                print(f"Crawler p={p}")
+                print(f"GetLink p={p}")
                 url = f"https://nhentai.net/g/{number}/{p}/"
                 return url
             #url = Getlink(page)
@@ -53,7 +55,7 @@ async def n(ctx,number=None,page=0):
                 print(f"Crawler url={url}")
                 r = requests.get(url,headers=headers)
                 return r
-            # r = Crawler(Getlink(p))
+            #r = Crawler(Getlink(p))
 
             #輸入網頁回應 取得圖片連結
             def FindImgUrl(r):
@@ -73,20 +75,6 @@ async def n(ctx,number=None,page=0):
                 return imgUrl
             #imgUrl = FindImgUrl(Crawler(GetLink(p)))
 
-
-                        embed = CreateEmbed(FindImgUrl(Crawler(GetLink(p))))
-            #輸入embed 傳送embed
-            #def SendEmbed(embed):
-            message = await ctx.send(embed=embed)
-            #SendEmbed(CreateEmbed(imgUrl))
-
-            #超出最後一頁時呼叫
-            def PageEnd():
-                Error404=True
-                embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",description="The end.")
-                embed.set_footer(text="By Young#0001")
-                await message.edit(embed=embed)
-
             #輸入圖片連結 建立embed
             def CreateEmbed(imgUrl):
                 embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",url=imgUrl)
@@ -94,21 +82,25 @@ async def n(ctx,number=None,page=0):
                 embed.set_image(url=imgUrl)
                 return embed
 
-
-
-            #輸入embed 編輯已傳送embed
-            def EditEmbed(embed):
-                await message.edit(embed=embed)
-            #EditEmbed(CreateEmbed(imgUrl))
-
-            #新增翻頁用表情符號
-            def ReationAdd():
-                for i in ["◀","▶"]:
-                    await message.add_reaction(i)
-            
             #檢查表情符號
             def check(reaction, user):
                 return user == ctx.author and reaction.message == message
+
+            #超出最後一頁時呼叫
+            def PageEnd():
+                Error404=True
+                embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",description="The end.")
+                embed.set_footer(text="By Young#0001")
+            
+
+            embed = CreateEmbed(FindImgUrl(Crawler(GetLink(p))))
+            #輸入embed 傳送embed
+            message = await ctx.send(embed=embed)
+
+            #新增翻頁用表情符號
+            for i in ["◀","▶"]:
+                await message.add_reaction(i)
+            
 
             while 1 :
                 reaction, user = await bot.wait_for("reaction_add",timeout=60.0,check=check)
@@ -126,7 +118,7 @@ async def n(ctx,number=None,page=0):
                     imgUrl = FindImgUrl(c)
                     Check404(c)
                     CreateEmbed(imgUrl)
-                    await message.edit(embed=embed)
+                    await message.edit(embed=embed)#輸入embed 編輯已傳送embed
             '''
             def dcSend():
                 reaction, user = await bot.wait_for("reaction_add",timeout=60.0,check=check)
