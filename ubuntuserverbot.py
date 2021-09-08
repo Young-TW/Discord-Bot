@@ -146,7 +146,7 @@ async def rebooterror(ctx,error):
 
 class Sokoban():
     def __init__(self,difficulty):
-        if difficulty==None :
+        if difficulty is None :
             high=10
             width=10
             number=1
