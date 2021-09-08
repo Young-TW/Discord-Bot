@@ -56,7 +56,7 @@ async def countdown(ctx, hour, minute):
 
 @bot.command()
 async def p(ctx,number=None):
-    if number!=None:
+    if number is not None:
         await ctx.send(f"https://www.pixiv.net/artworks/{number}")
     else :
         await ctx.send("please input numbers")
@@ -64,13 +64,13 @@ async def p(ctx,number=None):
 @bot.command()
 async def n(ctx,number=None,page=0):
     c = ctx.channel.is_nsfw()
-    if c == False:
+    if c is False:
         await ctx.send("This is not NSFW channel")
     else:
         urls = []
         def saveUrlIndex(index):
             urls.append(index)
-        if number!=None:
+        if number is not None:
             page = 0
             while 1:
                 url = f"https://nhentai.net/g/{number}/{page+1}/"
@@ -170,7 +170,7 @@ class Sokoban():
             if len(repeat)==2+number:
                 break
 
-        for i in range(len(repeat)) :
+        for i in range(len(repeat)):
             if i == 0 :
                 self.player=repeat[0]
             elif i == 1 :
@@ -266,4 +266,3 @@ class Game(commands.Cog):
 bot.add_cog(Game(bot))
 
 bot.run(jdata['YoungBotTOKEN'])
-

@@ -88,7 +88,6 @@ async def n(ctx,number=None,page=0):
 
             #超出最後一頁時呼叫
             def PageEnd():
-                Error404=True
                 embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",description="The end.")
                 embed.set_footer(text="By Young#0001")
             
@@ -102,7 +101,7 @@ async def n(ctx,number=None,page=0):
                 await message.add_reaction(i)
             
 
-            while 1 :
+            while 1:
                 reaction, user = await bot.wait_for("reaction_add",timeout=60.0,check=check)
                 if Error404 == True:
                     PageEnd()
