@@ -35,3 +35,4 @@ print(a)
 #bot.run(jdata['TestBotTOKEN'])
 
 # 不會寫 哭哭
+# 未完成
