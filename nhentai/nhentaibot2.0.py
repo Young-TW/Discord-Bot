@@ -72,4 +72,4 @@ async def n(ctx,number=None,page=0):
 ##################################################################################################
 # bot.run(jdata['TestBotTOKEN'])
 
-bot.run("Nzg2OTg2OTU0NDc4NTgzODU4.X9OYtw.oqe0V_ICdc5tn61nQTyaB2eMqqE")
+bot.run("")

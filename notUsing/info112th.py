@@ -112,3 +112,5 @@ async def rebooterror(ctx,error):
     await ctx.send("重啟錯誤")
 
 bot.run(jdata['info112thTOKEN'])
+
+# 廢棄
