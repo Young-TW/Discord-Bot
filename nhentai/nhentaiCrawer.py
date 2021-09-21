@@ -2,8 +2,9 @@ import bs4
 from bs4 import BeautifulSoup
 import requests
 
+urls = []
+
 def crawler(number,page):
-    urls = []
     page = 0
     while 1:
         print(f"第{page+1}頁爬蟲")

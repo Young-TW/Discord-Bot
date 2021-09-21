@@ -37,10 +37,10 @@ async def n(ctx,number=None,page=0):
             #輸出訊息
             print("輸出訊息")
             embed = discord.Embed
-            nhentaiEmbed.Embedinit()
+            nhentaiEmbed.Embed(url=url,urls=urls,page=page)
             embed.set_image(url=urls[0])
             #增加表情符號
-            message=await ctx.send(embed=embed)
+            message = await ctx.send(embed=embed)
             for i in ["◀","▶"]:
                 await message.add_reaction(i)
             #檢查表情符號(函式)
@@ -52,8 +52,7 @@ async def n(ctx,number=None,page=0):
                 print("檢查表情符號(迴圈)")
                 if(page + 1 > len(urls) - 1):
                     print("已結束")
-                    embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",description="The end.")
-                    embed.set_footer(text="By Young#0001")
+                    nhentaiEmbed.EmbedEnd()
                     await message.edit(embed=embed)
                     break
                 reaction, user = await bot.wait_for("reaction_add",timeout=60.0,check=check)
@@ -62,9 +61,7 @@ async def n(ctx,number=None,page=0):
                 elif str(reaction) == "◀":
                     page-=1
                 await message.remove_reaction(reaction,user)
-                embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",url=url)
-                embed.set_footer(text="By Young#0001")
-                embed.set_image(url=urls[page])
+                nhentaiEmbed.Embed(url=url,urls=urls,page=page)
                 await message.edit(embed=embed)
         else:
             await ctx.send(f"Please input number")
@@ -72,4 +69,4 @@ async def n(ctx,number=None,page=0):
 ##################################################################################################
 # bot.run(jdata['TestBotTOKEN'])
 
-bot.run("")
+bot.run("Nzg2OTg2OTU0NDc4NTgzODU4.X9OYtw.VSF93Uq1j1dqdleC-n1GiDaELvA")
