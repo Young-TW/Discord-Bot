@@ -86,4 +86,4 @@ async def n(ctx,number=None,page=0):
             await ctx.send(f"Please input number")
 
 ##################################################################################################
-bot.run('token here')
+bot.run('')
