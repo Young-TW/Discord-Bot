@@ -66,7 +66,7 @@ async def n(ctx,number=None,page=0):
             def check(reaction, user):
                 return user == ctx.author and reaction.message == message
             #檢查表情符號(迴圈)
-            while 1 :
+            while 1:
                 if(page > len(urls) - 1):
                     embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",description="The end.")
                     embed.set_footer(text="By Young#0001")
