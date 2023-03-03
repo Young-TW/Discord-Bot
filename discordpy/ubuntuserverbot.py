@@ -1,6 +1,6 @@
 import discord
-from discord.ext import commands,tasks#這裡是discord.ext
-from discord import Guild, guild#Guild定義在discord底下
+from discord.ext import commands,tasks
+from discord import Guild, guild
 import random
 import copy
 import os
@@ -25,7 +25,7 @@ async def on_ready():
 @bot.event
 async def on_member_join(member):
     channel = bot.get_channel(int(jdata['WelcomeChannelID']))
-    await channel.send(f'{member} Welcome to UwU!')
+    await channel.send(f'{member} Welcome to Young\'s server!')
 
 @bot.event
 async def on_member_remove(member):

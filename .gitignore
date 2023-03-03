@@ -1,2 +1,4 @@
 *.json
 /test
+/.idea
+/.vscode
