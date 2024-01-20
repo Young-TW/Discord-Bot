@@ -134,7 +134,7 @@ async def come(ctx):
 @commands.is_owner()
 async def bye(ctx):
     await cha.disconnect()
-  
+
 @bot.command()
 @commands.is_owner()
 async def reboot(ctx):

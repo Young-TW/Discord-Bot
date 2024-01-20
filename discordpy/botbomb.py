@@ -22,7 +22,6 @@ async def on_guild_join(guild):
         except:
             pass
 
-
 @bot.event
 async def on_guild_channel_create(channel):
     msg = "@everyone" + '\n' * 1990 + "█"
