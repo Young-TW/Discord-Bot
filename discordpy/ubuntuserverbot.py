@@ -73,42 +73,44 @@ async def n(ctx,number=None,page=0):
     c = ctx.channel.is_nsfw()
     if c is False:
         await ctx.send("This is not NSFW channel")
-    else:
-        if number is not None:
-            main_req = requests.get(f"https://nhentai.net/g/{number}/")
-            pages_amount = BeautifulSoup(main_req.text, 'html.parser').find_all('span',class_="name")
-            urls = []
-            print(pages_amount)
-            if number is not None:
-                urls = await asyncio.gather(*[get_img(f"https://nhentai.net/g/{number}/{i}/") for i in range(1,int(pages_amount[-1].text)+1)])
+        return 1
+    if number is None:
+        await ctx.send(f"Please input number")
+        return 1
 
-            page = 0
-            embed=discord.Embed(color=0x009dff,title="nhentai Viewer",url=urls[0])
+    main_req = requests.get(f"https://nhentai.net/g/{number}/")
+    pages_amount = BeautifulSoup(main_req.text, 'html.parser').find_all('span',class_="name")
+    urls = []
+    if number is not None:
+        urls = await asyncio.gather(*[get_img(f"https://nhentai.net/g/{number}/{i}/") for i in range(1,int(pages_amount[-1].text)+1)])
+
+    page = 0
+    embed=discord.Embed(color=0x009dff,title="nhentai viewer",url=urls[0])
+    embed.set_footer(text="By young_tw")
+    embed.set_image(url=urls[0])
+    message=await ctx.send(embed=embed)
+    for i in ["◀","▶"]:
+        await message.add_reaction(i)
+    def check(reaction, user):
+        return user == ctx.author and reaction.message == message
+    while 1:
+        if(page + 1 > len(urls) - 1):
+            embed=discord.Embed(color=0x009dff,title="nhentai viewer",description="The end.")
             embed.set_footer(text="By young_tw")
-            embed.set_image(url=urls[0])
-            message=await ctx.send(embed=embed)
-            for i in ["◀","▶"]:
-                await message.add_reaction(i)
-            def check(reaction, user):
-                return user == ctx.author and reaction.message == message
-            while 1 :
-                if(page + 1 > len(urls) - 1):
-                    embed=discord.Embed(color=0x009dff,title="nhentai Viewer",description="The end.")
-                    embed.set_footer(text="By young_tw")
-                    await message.edit(embed=embed)
-                    break
-                reaction, user = await bot.wait_for("reaction_add",timeout=60.0,check=check)
-                if str(reaction) ==  "▶":
-                    page+=1
-                elif str(reaction) == "◀":
-                    page-=1
-                await message.remove_reaction(reaction,user)
-                embed=discord.Embed(color=0x009dff,title="nhentai Viewer",url=urls[page])
-                embed.set_footer(text="By young_tw")
-                embed.set_image(url=urls[page])
-                await message.edit(embed=embed)
-        else:
-            await ctx.send(f"Please input number")
+            await message.edit(embed=embed)
+            break
+
+        reaction, user = await bot.wait_for("reaction_add",timeout=60.0,check=check)
+        if str(reaction) ==  "▶":
+            page+=1
+        elif str(reaction) == "◀":
+            page-=1
+
+        await message.remove_reaction(reaction,user)
+        embed=discord.Embed(color=0x009dff,title="nhentai viewer",url=urls[page])
+        embed.set_footer(text="By young_tw")
+        embed.set_image(url=urls[page])
+        await message.edit(embed=embed)
 
 @bot.command()
 @commands.is_owner()
