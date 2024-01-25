@@ -1,11 +1,9 @@
 import discord
-from discord.ext import commands,tasks
-from discord import Guild, guild
+from discord.ext import commands
 import random
 import copy
-import os
+import asyncio
 import requests
-import bs4
 from bs4 import BeautifulSoup
 import json
 import time
@@ -61,32 +59,32 @@ async def p(ctx,number=None):
     else :
         await ctx.send("please input numbers")
 
+async def get_img(url):
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    r = requests.get(url,headers=headers)
+    Burl = BeautifulSoup(r.text, 'html.parser')
+    img_tags = Burl.find_all('img')
+    for tag in img_tags:
+        imgUrl = tag.get('src')
+    return imgUrl
+
 @bot.command()
 async def n(ctx,number=None,page=0):
     c = ctx.channel.is_nsfw()
     if c is False:
         await ctx.send("This is not NSFW channel")
     else:
-        urls = []
-        def saveUrlIndex(index):
-            urls.append(index)
         if number is not None:
+            main_req = requests.get(f"https://nhentai.net/g/{number}/")
+            pages_amount = BeautifulSoup(main_req.text, 'html.parser').find_all('span',class_="name")
+            urls = []
+            print(pages_amount)
+            if number is not None:
+                urls = await asyncio.gather(*[get_img(f"https://nhentai.net/g/{number}/{i}/") for i in range(1,int(pages_amount[-1].text)+1)])
+
             page = 0
-            while 1:
-                url = f"https://nhentai.net/g/{number}/{page+1}/"
-                headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18362'}
-                r = requests.get(url,headers=headers)
-                Burl = BeautifulSoup(r.text, 'html.parser')
-                img_tags = Burl.find_all('img')
-                for tag in img_tags:
-                    imgUrl = tag.get('src')
-                saveUrlIndex(imgUrl)
-                if imgUrl == "https://static.nhentai.net/img/logo.090da3be7b51.svg":
-                    break
-                page += 1
-            page = 0
-            embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",url=url)
-            embed.set_footer(text="By Young#0001")
+            embed=discord.Embed(color=0x009dff,title="nhentai Viewer",url=urls[0])
+            embed.set_footer(text="By young_tw")
             embed.set_image(url=urls[0])
             message=await ctx.send(embed=embed)
             for i in ["◀","▶"]:
@@ -95,8 +93,8 @@ async def n(ctx,number=None,page=0):
                 return user == ctx.author and reaction.message == message
             while 1 :
                 if(page + 1 > len(urls) - 1):
-                    embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",description="The end.")
-                    embed.set_footer(text="By Young#0001")
+                    embed=discord.Embed(color=0x009dff,title="nhentai Viewer",description="The end.")
+                    embed.set_footer(text="By young_tw")
                     await message.edit(embed=embed)
                     break
                 reaction, user = await bot.wait_for("reaction_add",timeout=60.0,check=check)
@@ -105,8 +103,8 @@ async def n(ctx,number=None,page=0):
                 elif str(reaction) == "◀":
                     page-=1
                 await message.remove_reaction(reaction,user)
-                embed=discord.Embed(color=0x009dff,title="Nhentai Viewer",url=url)
-                embed.set_footer(text="By Young#0001")
+                embed=discord.Embed(color=0x009dff,title="nhentai Viewer",url=urls[page])
+                embed.set_footer(text="By young_tw")
                 embed.set_image(url=urls[page])
                 await message.edit(embed=embed)
         else:
@@ -258,7 +256,7 @@ class Game(commands.Cog):
             if str(reaction)=="⏹":break
             ww.userinput(str(reaction))
             text,t=ww.mapprint()
-            embed=discord.Embed(title="sokoban",description=f"```\n{text}\n```")       
+            embed=discord.Embed(title="sokoban",description=f"```\n{text}\n```")
             await message.edit(embed=embed)
             if t :
                 await ctx.send("過關")
