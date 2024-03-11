@@ -1,7 +1,5 @@
 import discord
 from discord.ext import commands
-import random
-import copy
 import asyncio
 import requests
 from bs4 import BeautifulSoup
@@ -39,21 +37,21 @@ async def countdown(ctx, hour, minute):
     hour = int(hour)
     minute = int(minute)
     minute = minute + (hour*60)
-    embed=discord.Embed(color = 0x009dff, title = f"倒數計時開始 剩下 {minute} 分鐘")
+    embed = discord.Embed(color = 0x009dff, title = f"倒數計時開始 剩下 {minute} 分鐘")
     msg = await ctx.send(embed = embed)
     time.sleep(60)
     while 1:
         minute = minute - 1
         if minute == 0:
-            embed=discord.Embed(color=0x009dff,title="時間到!")
+            embed = discord.Embed(color = 0x009dff, title = "時間到!")
             await msg.edit(embed = embed)
             break
-        embed=discord.Embed(color=0x009dff,title=f"剩下 {minute} 分鐘")
+        embed = discord.Embed(color = 0x009dff, title = f"剩下 {minute} 分鐘")
         await msg.edit(embed = embed)
         time.sleep(60)
 
 @bot.command()
-async def p(ctx, number=None):
+async def p(ctx, number = None):
     if number is not None:
         await ctx.send(f"https://www.pixiv.net/artworks/{number}")
     else :
@@ -79,22 +77,21 @@ async def n(ctx,number = None):
         return 1
 
     main_req = requests.get(f"https://nhentai.net/g/{number}/")
-    pages_amount = BeautifulSoup(main_req.text, 'html.parser').find_all('span',class_ = "name")
+    pages_amount = BeautifulSoup(main_req.text, 'html.parser').find_all('span', class_ = "name")
     urls = []
     if number is not None:
-        urls = await asyncio.gather(*[get_img(f"https://nhentai.net/g/{number}/{i}/") for i in range(1,int(pages_amount[-1].text)+1)])
+        urls = await asyncio.gather(*[get_img(f"https://nhentai.net/g/{number}/{i}/") for i in range(1, int(pages_amount[-1].text)+1)])
 
     page = 0
-    embed = discord.Embed(color = 0x009dff,title = "nhentai viewer",url = urls[0]).set_footer(text = "By young_tw").set_image(url = urls[0])
+    embed = discord.Embed(color = 0x009dff, title = "nhentai viewer", url = urls[0]).set_footer(text = "By young_tw").set_image(url = urls[0])
     message = await ctx.send(embed = embed)
-    for i in ["◀","▶"]:
+    for i in ["◀", "▶"]:
         await message.add_reaction(i)
     def check(reaction, user):
         return user == ctx.author and reaction.message == message
     while 1:
         if(page + 1 > len(urls) - 1):
-            embed = discord.Embed(color=0x009dff, title = "nhentai viewer", description = "The end.")
-            embed.set_footer(text = "By young_tw")
+            embed = discord.Embed(color = 0x009dff, title = "nhentai viewer", description = "The end.").set_footer(text = "By young_tw")
             await message.edit(embed = embed)
             break
 
@@ -104,8 +101,8 @@ async def n(ctx,number = None):
         elif str(reaction) == "◀":
             page -= 1
 
-        await message.remove_reaction(reaction,user)
-        embed = discord.Embed(color = 0x009dff, title="nhentai viewer", url = urls[page]).set_footer(text = "By young_tw").set_image(url = urls[page])
+        await message.remove_reaction(reaction, user)
+        embed = discord.Embed(color = 0x009dff, title = "nhentai viewer", url = urls[page]).set_footer(text = "By young_tw").set_image(url = urls[page])
         await message.edit(embed = embed)
 
 @bot.command()
@@ -116,7 +113,7 @@ async def say(ctx, *, msg):
 
 @bot.command()
 @commands.is_owner()
-async def delete(ctx:commands.Context,number:int):
+async def delete(ctx:commands.Context, number:int):
     await ctx.channel.purge(limit = number+1)
 
 cha = None
@@ -128,7 +125,7 @@ async def come(ctx):
 
 @bot.command()
 @commands.is_owner()
-async def bye():
+async def bye(ctx):
     await cha.disconnect()
 
 @bot.command()
