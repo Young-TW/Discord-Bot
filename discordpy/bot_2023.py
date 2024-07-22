@@ -21,4 +21,4 @@ async def on_message(message):
     if message.content.startswith('$hello'):
         await message.channel.send('Hello!')
 
-client.run(jfile["TestBotTOKEN"])
+client.run(jfile["TOKEN"])

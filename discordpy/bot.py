@@ -137,4 +137,4 @@ async def reboot(ctx):
 async def rebooterror(ctx, error):
     await ctx.send("reboot failed")
 
-bot.run(jdata['YoungBotTOKEN'])
+bot.run(jdata['TOKEN'])
