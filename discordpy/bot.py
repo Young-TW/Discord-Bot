@@ -96,7 +96,7 @@ async def n(ctx,number = None):
             break
 
         reaction, user = await bot.wait_for("reaction_add", timeout = 60.0, check = check)
-        if str(reaction) ==  "▶":
+        if str(reaction) == "▶":
             page += 1
         elif str(reaction) == "◀":
             page -= 1
